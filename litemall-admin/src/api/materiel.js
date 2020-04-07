@@ -66,9 +66,10 @@ export function materielAdd(data) {
   })
 }
 
+// 中转方确认
 export function sureStatus(data) {
   return request({
-    url: '/brand/delete',
+    url: '/drug/application/confirm',
     method: 'post',
     data
   })
@@ -76,7 +77,7 @@ export function sureStatus(data) {
 // 提交方保存
 export function saveStatus(data) {
   return request({
-    url: '/drug/application/confirm',
+    url: '/drug/application/add',
     method: 'post',
     data
   })

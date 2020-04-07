@@ -6,10 +6,10 @@
       <el-select v-model="schoolId" clearable placeholder="请选择学校" @change="schoolChange">
         <el-option v-for="item in schoolList" :key="item.value" :label="item.name" :value="item.id" />
       </el-select>
-      <el-select v-model="zoneId" clearable placeholder="请选择校区" @change="schoolChange">
+      <el-select v-model="zoneId" clearable placeholder="请选择校区" @change="zoneChange">
         <el-option v-for="item in zoneList" :key="item.value" :label="item.name" :value="item.id" />
       </el-select>
-      <el-select v-model="brandId" clearable placeholder="请选择实验室">
+      <el-select v-model="labId" clearable placeholder="请选择实验室" @change="labChange">
         <el-option v-for="item in brandList" :key="item.value" :label="item.name" :value="item.id" />
       </el-select>
      </div>
@@ -27,7 +27,7 @@
       
       <el-table-column align="center" label="品名" prop="name" />
       <el-table-column align="center" label="cas号" prop="id" />
-      <el-table-column align="center" label="重量" prop="name">
+      <el-table-column align="center" label="重量" prop="weight">
         <template slot-scope="scope">
           <el-input v-model="scope.row.weight" />
         </template>
@@ -146,8 +146,11 @@ export default {
       schoolList: [],
       zoneList: [],
       schoolId: '',
+      schoolName: '',
       zoneId: '',
-      brandId: '',
+      zoneName: '',
+      labId: '',
+      labName: '',
       multipleSelection: [],
       tableData: [],
       dialogmultipleSelection: [],
@@ -215,14 +218,18 @@ export default {
         this.$message.error('请选择至少一条记录')
         return
       }
-      console.log("this.dialogmultipleSelection1",this.dialogmultipleSelection)
       let addlist = []
       this.dialogmultipleSelection.filter( (item)=> {
         let it = {...item}
         it.schoolId = this.schoolId
+        it.zoneId = this.zoneId
+
+        it.labId = this.labId
+        it.labName = this.labName
+        it.weight = ''
+        it.mark = ''
         addlist.push(it)
       })
-      console.log("this.dialogmultipleSelection2",this.dialogmultipleSelection)
       console.log("this.addlist",addlist)
       this.list = this.list.concat(this.dialogmultipleSelection)
       // this.list = this.list.concat(this.dialogmultipleSelection)
@@ -231,14 +238,18 @@ export default {
       this.tableData = []
     },
     schoolChange (item){
-      console.log("item",item)
+      this.schoolName = item.label || ''
+    },
+    zoneChange (item){
+      this.zoneName = item.label || ''
+    },
+    labChange (item){
+      this.labName = item.label || ''
     },
     searchTypeChange (item){
-      // console.log("item",item)
       let sel = this.searchTypeList.filter(it=>{
         return it.value === item
       })
-      // console.log("sel",sel)
       if (sel.length) {
         this.searchTypeValue = sel[0].label
       }
@@ -258,8 +269,7 @@ export default {
       this.listLoading = true
       searchList({[this.searchType]:this.searchName})
         .then(response => {
-          this.tableData = response.data.list
-          // this.tableData = [{name:'sdfsdf'}]
+          this.tableData = response.data && response.data.data && response.data.data.list
           this.listLoading = false
         })
         .catch(() => {
@@ -275,12 +285,11 @@ export default {
       this.dialogmultipleSelection = val
     },
     handleAdd(){
-      if (!this.brandId || !this.zoneId ||  !this.schoolId) {
+      if (!this.labId || !this.zoneId ||  !this.schoolId) {
         this.$message.error('请选择所在的学校、校区和实验室')
         return
       }
       this.dialogFormVisible = true
-      // this.$router.push({ path: '/materiel/create' })  
       // this.$router.push({ path: '/profile/create' })  
 
     },
@@ -289,15 +298,23 @@ export default {
         this.$message.error('请选择至少一条记录')
         return
       }
+      
+      let checkList = this.multipleSelection.filter(it=>{
+        return !it.weight
+      })
+      if (checkList.length) {
+        this.$message.error('所有药剂重量必须填写！')
+        return
+      }
       const ids = []
       _.forEach(this.multipleSelection, function(item) {
         ids.push(item.id)
       })
-      saveStatus({ ids: ids })
+      drugCommit({ ids: ids })
         .then(response => {
           this.$notify.success({
             title: '成功',
-            message: '批量通过操作成功'
+            message: '批量提交操作成功'
           })
           this.getList()
         })
@@ -313,11 +330,19 @@ export default {
         this.$message.error('请选择至少一条记录')
         return
       }
+      let checkList = this.multipleSelection.filter(it=>{
+        return !it.weight
+      })
+      if (checkList.length) {
+        this.$message.error('所有药剂重量必须填写！')
+        return
+      }
       const ids = []
       _.forEach(this.multipleSelection, function(item) {
         ids.push(item.id)
       })
-      batchRejectAftersale({ ids: ids })
+      // saveStatus({ ids: ids })
+      saveStatus(this.multipleSelection)
         .then(response => {
           this.$notify.success({
             title: '成功',
