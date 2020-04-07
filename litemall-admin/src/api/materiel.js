@@ -60,7 +60,7 @@ export function searchList(data) {
 // 提交方新增
 export function materielAdd(data) {
   return request({
-    url: '/drug/application/add',
+    url: '/drug/dic/add',
     method: 'post',
     data
   })

@@ -145,9 +145,9 @@ export default {
       brandList: [],
       schoolList: [],
       zoneList: [],
-      schoolId: undefined,
-      zoneId: undefined,
-      brandId: undefined,
+      schoolId: '',
+      zoneId: '',
+      brandId: '',
       multipleSelection: [],
       tableData: [],
       dialogmultipleSelection: [],
@@ -210,13 +210,22 @@ export default {
           this.listLoading = false
         })
     },
-    createData(){
+    createData(){//添加
       if (this.dialogmultipleSelection.length === 0) {
         this.$message.error('请选择至少一条记录')
         return
       }
-      
+      console.log("this.dialogmultipleSelection1",this.dialogmultipleSelection)
+      let addlist = []
+      this.dialogmultipleSelection.filter( (item)=> {
+        let it = {...item}
+        it.schoolId = this.schoolId
+        addlist.push(it)
+      })
+      console.log("this.dialogmultipleSelection2",this.dialogmultipleSelection)
+      console.log("this.addlist",addlist)
       this.list = this.list.concat(this.dialogmultipleSelection)
+      // this.list = this.list.concat(this.dialogmultipleSelection)
       this.dialogFormVisible = false
       this.searchName = ''
       this.tableData = []
@@ -238,7 +247,7 @@ export default {
       rows.splice(index, 1);
     },
     updateData(){},
-    handleFilter() {
+    handleFilter() {//搜索
       if (!this.searchName) {
         this.$message.error('请输入搜索内容')
         return
@@ -249,8 +258,8 @@ export default {
       this.listLoading = true
       searchList({[this.searchType]:this.searchName})
         .then(response => {
-          this.tableData = response.data.data.list
-          // this.total = response.data.data.total
+          this.tableData = response.data.list
+          // this.tableData = [{name:'sdfsdf'}]
           this.listLoading = false
         })
         .catch(() => {
