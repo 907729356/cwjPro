@@ -307,9 +307,9 @@ export default {
         return
       }
       const ids = []
-      _.forEach(this.multipleSelection, function(item) {
-        ids.push(item.id)
-      })
+      // _.forEach(this.multipleSelection, function(item) {
+      //   ids.push(item.id)
+      // })
       drugCommit({ ids: ids })
         .then(response => {
           this.$notify.success({
