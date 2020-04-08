@@ -127,7 +127,7 @@
 
 <script>
 
-import { schoolList, schoolZone, laboratoryList, listBrand, queryList, searchList,materielAdd, drugCommit, saveStatus, deleteBrand } from '@/api/materiel'
+import { schoolList, schoolZone, laboratoryList, queryList, searchList,materielAdd, drugCommit, saveStatus, deleteBrand } from '@/api/materiel'
 import BackToTop from '@/components/BackToTop'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import _ from 'lodash'
@@ -199,7 +199,6 @@ export default {
     },
     getList() {
       this.listLoading = true
-      // listBrand()
       queryList()
         .then(response => {
           this.list = response.data.data.list

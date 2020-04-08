@@ -73,12 +73,12 @@ export default {
     ])
   },
   created() {
-    info().then(response => {
-      this.userTotal = response.data.data.userTotal
-      this.goodsTotal = response.data.data.goodsTotal
-      this.productTotal = response.data.data.productTotal
-      this.orderTotal = response.data.data.orderTotal
-    })
+    // info().then(response => {//获取通知的消息数量
+    //   this.userTotal = response.data.data.userTotal
+    //   this.goodsTotal = response.data.data.goodsTotal
+    //   this.productTotal = response.data.data.productTotal
+    //   this.orderTotal = response.data.data.orderTotal
+    // })
   },
   methods: {
     handleSetLineChartData(type) {

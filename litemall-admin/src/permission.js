@@ -16,6 +16,8 @@ function hasPermission(perms, permissions) {
 
 const whiteList = ['/login', '/auth-redirect']// no redirect whitelist
 
+// Cookies.set('X-Litemall-Admin-Token', '95a47c50-dd87-49a4-a99e-70cdcbce17c8')//写死测试
+
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   if (getToken()) { // determine if there has token

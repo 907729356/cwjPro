@@ -254,8 +254,8 @@ export const asyncRouterMap = [
         component: () => import('@/views/materiel/create'),
         name: 'materielCreate',
         meta: {
-          perms: ['GET /admin/drug/application/findByLab', 'POST /admin/drug/application/commit', 'POST /admin/drug/application/add'],
-          title: '提交方',
+          perms: ['GET /admin/drug/application/querySave', 'POST /admin/drug/application/commit', 'POST /admin/drug/application/add'],
+          title: '提交',
           hidden: true,
           noCache: true
         }
@@ -265,8 +265,28 @@ export const asyncRouterMap = [
         component: () => import('@/views/materiel/list'),
         name: 'materielList',
         meta: {
-          perms: ['POST /admin/drug/application/confirm', 'GET /admin/drug/application/list'],
-          title: '中转方',
+          perms: ['GET /admin/drug/application/queryLab'],
+          title: '申请列表',
+          noCache: true
+        }
+      },
+      {
+        path: 'station',
+        component: () => import('@/views/materiel/station'),
+        name: 'stationlist',
+        meta: {
+          perms: ['GET /admin/drug/application/queryAll', 'POST /admin/drug/application/confirm'],
+          title: '中转站',
+          noCache: true
+        }
+      },
+      {
+        path: 'department',
+        component: () => import('@/views/materiel/department'),
+        name: 'departmentList',
+        meta: {
+          perms: ['POST /admin/drug/application/pass', 'GET /admin/drug/application/queryCommited'],
+          title: '总务处',
           noCache: true
         }
       },
@@ -290,6 +310,70 @@ export const asyncRouterMap = [
       //     noCache: true
       //   }
       // },
+    ]
+  },
+  
+  {
+    path: '/sys',
+    component: Layout,
+    redirect: 'noredirect',
+    alwaysShow: true,
+    name: 'sysManage',
+    meta: {
+      title: '系统管理',
+      icon: 'chart'
+    },
+    children: [
+      {
+        path: 'admin',
+        component: () => import('@/views/sys/admin'),
+        name: 'admin',
+        meta: {
+          perms: ['GET /admin/admin/list', 'POST /admin/admin/create', 'POST /admin/admin/update', 'POST /admin/admin/delete'],
+          title: '用户管理',
+          noCache: true
+        }
+      },
+      {
+        path: 'role',
+        component: () => import('@/views/sys/role'),
+        name: 'role',
+        meta: {
+          perms: ['GET /admin/role/list', 'POST /admin/role/create', 'POST /admin/role/update', 'POST /admin/role/delete', 'GET /admin/role/permissions', 'POST /admin/role/permissions'],
+          title: '角色管理',
+          noCache: true
+        }
+      },
+      // {
+      //   path: 'notice',
+      //   component: () => import('@/views/sys/notice'),
+      //   name: 'sysNotice',
+      //   meta: {
+      //     perms: ['GET /admin/notice/list', 'POST /admin/notice/create', 'POST /admin/notice/update', 'POST /admin/notice/delete'],
+      //     title: '通知管理',
+      //     noCache: true
+      //   }
+      // },
+      // {
+      //   path: 'log',
+      //   component: () => import('@/views/sys/log'),
+      //   name: 'log',
+      //   meta: {
+      //     perms: ['GET /admin/log/list'],
+      //     title: '操作日志',
+      //     noCache: true
+      //   }
+      // },
+      // {
+      //   path: 'os',
+      //   component: () => import('@/views/sys/os'),
+      //   name: 'os',
+      //   meta: {
+      //     perms: ['GET /admin/storage/list', 'POST /admin/storage/create', 'POST /admin/storage/update', 'POST /admin/storage/delete'],
+      //     title: '对象存储',
+      //     noCache: true
+      //   }
+      // }
     ]
   },
 
@@ -443,70 +527,6 @@ export const asyncRouterMap = [
   //     }
   //   ]
   // },
-
-  {
-    path: '/sys',
-    component: Layout,
-    redirect: 'noredirect',
-    alwaysShow: true,
-    name: 'sysManage',
-    meta: {
-      title: '系统管理',
-      icon: 'chart'
-    },
-    children: [
-      {
-        path: 'admin',
-        component: () => import('@/views/sys/admin'),
-        name: 'admin',
-        meta: {
-          perms: ['GET /admin/admin/list', 'POST /admin/admin/create', 'POST /admin/admin/update', 'POST /admin/admin/delete'],
-          title: '管理员',
-          noCache: true
-        }
-      },
-      {
-        path: 'notice',
-        component: () => import('@/views/sys/notice'),
-        name: 'sysNotice',
-        meta: {
-          perms: ['GET /admin/notice/list', 'POST /admin/notice/create', 'POST /admin/notice/update', 'POST /admin/notice/delete'],
-          title: '通知管理',
-          noCache: true
-        }
-      },
-      {
-        path: 'log',
-        component: () => import('@/views/sys/log'),
-        name: 'log',
-        meta: {
-          perms: ['GET /admin/log/list'],
-          title: '操作日志',
-          noCache: true
-        }
-      },
-      {
-        path: 'role',
-        component: () => import('@/views/sys/role'),
-        name: 'role',
-        meta: {
-          perms: ['GET /admin/role/list', 'POST /admin/role/create', 'POST /admin/role/update', 'POST /admin/role/delete', 'GET /admin/role/permissions', 'POST /admin/role/permissions'],
-          title: '角色管理',
-          noCache: true
-        }
-      },
-      {
-        path: 'os',
-        component: () => import('@/views/sys/os'),
-        name: 'os',
-        meta: {
-          perms: ['GET /admin/storage/list', 'POST /admin/storage/create', 'POST /admin/storage/update', 'POST /admin/storage/delete'],
-          title: '对象存储',
-          noCache: true
-        }
-      }
-    ]
-  },
 
   // {
   //   path: '/config',

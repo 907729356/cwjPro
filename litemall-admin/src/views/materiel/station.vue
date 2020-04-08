@@ -10,7 +10,7 @@
         <el-option v-for="item in brandList" :key="item.value" :label="item.name" :value="item.id" />
       </el-select>
       <!-- <el-input class="filter-item" style="width:200px;"  placeholder="输入搜索内容" v-model="brandId"/> -->
-      <!-- <el-button v-permission="['GET /admin/drug/application/list']" class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button> -->
+      <el-button v-permission="['GET /admin/drug/application/list']" class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
      </div>
 
     <!-- <div class="operator-container" style="dispaly:flex;justify-content:space-between;"> -->
@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { labList, listBrand, laboratoryList, sureStatus, } from '@/api/materiel'
+import { stationList, listBrand, laboratoryList, sureStatus, } from '@/api/materiel'
 import BackToTop from '@/components/BackToTop'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import _ from 'lodash'
@@ -96,7 +96,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      labList(this.listQuery)
+      stationList(this.listQuery)
       // listBrand(this.listQuery)
         .then(response => {
           this.list = response.data.data.list

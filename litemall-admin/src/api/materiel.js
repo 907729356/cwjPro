@@ -10,15 +10,31 @@ export function listBrand(query) {
 // 提交方查询
 export function queryList(query) {
   return request({
-    url: '/drug/application/findByLab',
+    url: '/drug/application/querySave',
     method: 'get',
     params: query
   })
 }
-// 中转站查询
-export function getDrugList(query) {
+// 申请列表查询
+export function labList(query) {
   return request({
-    url: '/drug/application/list',
+    url: '/drug/application/queryLab',
+    method: 'get',
+    params: query
+  })
+}
+// 中转站列表查询
+export function stationList(query) {
+  return request({
+    url: '/drug/application/queryAll',
+    method: 'get',
+    params: query
+  })
+}
+// 总务处列表查询
+export function commitList(query) {
+  return request({
+    url: '/drug/application/queryCommited',
     method: 'get',
     params: query
   })
