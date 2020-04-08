@@ -28,11 +28,11 @@
           <i style="margin-top:-7px;" class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
-          <router-link to="/">
+          <!-- <router-link to="/">
             <el-dropdown-item>
               首页
             </el-dropdown-item>
-          </router-link>
+          </router-link> -->
           <!-- <el-dropdown-item divided>
             <a target="_blank" href="https://github.com/linlinjava/litemall">
               GitHub
@@ -43,11 +43,11 @@
               码云
             </a>
           </el-dropdown-item> -->
-          <el-dropdown-item divided>
+          <!-- <el-dropdown-item divided>
             <router-link to="/profile/password">
               密码修改
             </router-link>
-          </el-dropdown-item>
+          </el-dropdown-item> -->
           <el-dropdown-item divided>
             <span style="display:block;" @click="logout">退出</span>
           </el-dropdown-item>

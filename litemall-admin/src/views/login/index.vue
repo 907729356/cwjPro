@@ -2,38 +2,30 @@
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <div class="title-container">
-        <h3 class="title">管理员登录</h3>
+        <h3 class="title">登录</h3>
       </div>
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
-        <el-input v-model="loginForm.username" name="username" type="text" tabindex="1" auto-complete="on" placeholder="管理员账户" />
+        <el-input v-model="loginForm.username" name="username" type="text" tabindex="1" auto-complete="on" placeholder="账户" />
       </el-form-item>
 
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
-        <el-input v-model="loginForm.password" :type="passwordType" name="password" auto-complete="on" tabindex="2" show-password placeholder="管理员密码" @keyup.enter.native="handleLogin" />
+        <el-input v-model="loginForm.password" :type="passwordType" name="password" auto-complete="on" tabindex="2" show-password placeholder="密码" @keyup.enter.native="handleLogin" />
       </el-form-item>
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
 
-      <div style="position:relative">
+      <!-- <div style="position:relative">
         <div class="tips">
-          <span> 超级管理员用户名: admin123</span>
-          <span> 超级管理员用户名：admin123</span>
+          <span> 用户名: admin123</span>
+          <span> 密  码：admin123</span>
         </div>
-        <div class="tips">
-          <span> 商城管理员用户名: mall123</span>
-          <span> 商城管理员用户名：mall123</span>
-        </div>
-        <div class="tips">
-          <span> 推广管理员用户名: promotion123</span>
-          <span> 推广管理员用户名：promotion123</span>
-        </div>
-      </div>
+      </div> -->
     </el-form>
 
     <div class="copyright">
@@ -48,20 +40,20 @@ export default {
   data() {
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('管理员密码长度应大于6'))
+        callback(new Error('密码长度应大于6'))
       } else {
         callback()
       }
     }
     return {
       loginForm: {
-        username: 'admin123',
-        password: 'admin123'
+        username: '',//admin123
+        password: '',//admin123
       },
       loginRules: {
-        username: [{ required: true, message: '管理员账户不允许为空', trigger: 'blur' }],
+        username: [{ required: true, message: '账户不允许为空', trigger: 'blur' }],
         password: [
-          { required: true, message: '管理员密码不允许为空', trigger: 'blur' },
+          { required: true, message: '密码不允许为空', trigger: 'blur' },
           { validator: validatePassword, trigger: 'blur' }
         ]
       },

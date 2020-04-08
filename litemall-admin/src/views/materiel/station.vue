@@ -21,7 +21,7 @@
       <el-table-column type="selection" width="55" />
       
       <el-table-column align="center" label="ID" prop="id" />
-      <el-table-column align="center" label="品名" prop="name" />
+      <el-table-column align="center" label="品名" prop="name" show-overflow-tooltip/>
       <el-table-column align="center" label="cas号" prop="cas" />
       <el-table-column align="center" label="状态" prop="status">
         <template slot-scope="scope">
@@ -32,9 +32,11 @@
         
       </el-table-column>
       <el-table-column align="center" label="分类" prop="name" show-overflow-tooltip/>
-      <el-table-column align="center" label="备注" prop="remark" >
-         
-      </el-table-column>
+      <el-table-column align="center" label="创建人" prop="addUser" show-overflow-tooltip />
+      <el-table-column align="center" label="提交人" prop="commitUser"  show-overflow-tooltip/>
+      <el-table-column align="center" label="审批人" prop="approvalUser"  show-overflow-tooltip/>
+      <el-table-column align="center" label="确认人" prop="confirmUser"  show-overflow-tooltip/>
+      <el-table-column align="center" label="备注" prop="remark" show-overflow-tooltip />
 
     </el-table>
 

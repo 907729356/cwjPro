@@ -81,27 +81,27 @@ export default new Router({
 
 export const asyncRouterMap = [
   
-  {
-    path: '/profile',
-    component: Layout,
-    redirect: 'noredirect',
-    alwaysShow: true,
-    children: [
-      {
-        path: 'password',
-        component: () => import('@/views/profile/password'),
-        name: 'password',
-        meta: { title: '修改密码', noCache: true }
-      },
-      // {
-      //   path: 'notice',
-      //   component: () => import('@/views/profile/notice'),
-      //   name: 'notice',
-      //   meta: { title: '通知中心', noCache: true }
-      // },
-    ],
-    hidden: true
-  },
+  // {
+  //   path: '/profile',
+  //   component: Layout,
+  //   redirect: 'noredirect',
+  //   alwaysShow: true,
+  //   children: [
+  //     {
+  //       path: 'password',
+  //       component: () => import('@/views/profile/password'),
+  //       name: 'password',
+  //       meta: { title: '修改密码', noCache: true }
+  //     },
+  //     {
+  //       path: 'notice',
+  //       component: () => import('@/views/profile/notice'),
+  //       name: 'notice',
+  //       meta: { title: '通知中心', noCache: true }
+  //     },
+  //   ],
+  //   hidden: true
+  // },
 
   {
     path: '/materiel',
