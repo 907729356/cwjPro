@@ -3,48 +3,42 @@
 
     <!-- 查询和其他操作 -->
     <div class="filter-container">
-      <el-select class="filter-item" v-model="statusId" clearable placeholder="请选择状态">
+      <!-- <el-select v-model="schoolId" clearable placeholder="请选择学校" @change="schoolChange"> -->
+      
+      <el-select v-model="statusId" clearable placeholder="请选择状态" @change="statusChange">
         <el-option v-for="item in statusList" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
-      <el-select class="filter-item" v-model="brandId" clearable placeholder="请选择实验室">
-        <el-option v-for="item in brandList" :key="item.value" :label="item.name" :value="item.id" />
+      <el-select v-model="labId" placeholder="请选择实验室" @change="labChange">
+        <el-option v-for="item in labList" :key="item.value" :label="item.name" :value="item.id" />
       </el-select>
-      <!-- <el-input class="filter-item" style="width:200px;"  placeholder="输入搜索内容" v-model="brandId"/> -->
-      <el-button v-permission="['GET /admin/drug/application/list']" class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
      </div>
 
-    <!-- <div class="operator-container" style="dispaly:flex;justify-content:space-between;"> -->
-    <div class="operator-container">
-        <el-button v-permission="['POST /admin/drug/application/pass']" class="filter-item" type="success" @click="handleBatchRecept">审批通过</el-button>
+    <div class="operator-container" style="dispaly:flex;justify-content:space-between;">     
+        <el-button v-permission="['POST /admin/drug/application/pass']" class="filter-item" type="success" @click="handleBatchPass">审批</el-button>
     </div>
 
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" fit highlight-current-row @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" />
-
       
-      <el-table-column align="left" label="品名" prop="name" show-overflow-tooltip/>
-      <el-table-column align="left" label="cas号" prop="id"  show-overflow-tooltip/>
-      <el-table-column align="left" label="重量" prop="weight" show-overflow-tooltip>
-        <!-- <template slot-scope="scope">
-          <el-input v-model="scope.row.weight" />
-        </template> -->
+      <el-table-column align="center" label="ID" prop="id" />
+      <el-table-column align="center" label="品名" prop="name" />
+      <el-table-column align="center" label="cas号" prop="cas" />
+      <el-table-column align="center" label="状态" prop="status">
+        <template slot-scope="scope">
+          <span class="st-icon-pandora">{{scope.row.status===1?'未提交':scope.row.status===2?'已提交':scope.row.status===3?'已审批':'已确认'}}</span>
+        </template>
+    </el-table-column>
+      <el-table-column align="center" label="重量" prop="weight">
+        
       </el-table-column>
-      <el-table-column align="left" label="分类" prop="name" show-overflow-tooltip/>
-      <el-table-column align="left" label="备注" prop="mark" show-overflow-tooltip>
-          <!-- <template slot-scope="scope">
-            <el-input v-model="scope.row.mark" />
-          </template> -->
+      <el-table-column align="center" label="分类" prop="name" show-overflow-tooltip/>
+      <el-table-column align="center" label="备注" prop="remark" >
+         
       </el-table-column>
 
-      <!-- <el-table-column align="center" label="操作" min-width="120" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button v-permission="['GET /admin/brand/list']" type="danger" size="mini" @click="deleteRow(scope.$index, list)">删除</el-button>
-        </template>
-      </el-table-column> -->
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-    
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />  
 
     <el-tooltip placement="top" content="返回顶部">
       <back-to-top :visibility-height="100" />
@@ -54,7 +48,8 @@
 </template>
 
 <script>
-import { commitList, listBrand, laboratoryList, sureStatus, } from '@/api/materiel'
+
+import { schoolList, schoolZone, laboratoryList, departmentList, departmentPass } from '@/api/materiel'
 import BackToTop from '@/components/BackToTop'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import _ from 'lodash'
@@ -64,40 +59,64 @@ export default {
   components: { BackToTop, Pagination },
   data() {
     return {
-      list: [],
-      total: 0,
-      listLoading: false,
-      // tab: 'all',
       listQuery: {
         page: 1,
         limit: 20,
-        // aftersaleSn: undefined,
-        // orderId: undefined,
-        // status: '',
-        // sort: 'add_time',
-        // order: 'desc'
       },
-      brandList: [],
-      statusList: [],
-      statusId: '',
-      brandId: undefined,
+      list: [],
+      total: 0,
+      listLoading: false,
+      dialogFormVisible: false,
+      dialogStatus: 'create',//create新增 else编辑
+      labList: [],
+      schoolList: [],
+      zoneList: [],
+      schoolId: '',
+      schoolName: '',
+      zoneId: '',
+      zoneName: '',
+      labId: '',
+      labName: '',
       multipleSelection: [],
+      tableData: [],
+      dialogmultipleSelection: [],
+      dialoSelData: [],
+      statusList: [],
+      searchType: '',
+      searchTypeValue: '',
+      searchName: '',
+      statusId: '',
+      searchTypeList: [],
+      contentDialogVisible: false,
+      downloadLoading: false
     }
   },
   created() {
     this.getBrand()
-    this.getList()
+    // this.getList()
+    
     this.statusList = [
-      // {value:'1',label:'保存'},
+      {value:'1',label:'未提交'},
       {value:'2',label:'已提交'},
-      {value:'3',label:'已确认'},
+      {value:'3',label:'已审批'},
+      {value:'4',label:'已确定'},
     ]
   },
   methods: {
+    getBrand() {
+      laboratoryList()
+        .then(response => {
+          this.labList = response.data.data.list
+          if (this.labList.length) {
+            this.labId = this.labList[0].id
+            this.labName = this.labList[0].name
+            this.getList()
+          }
+        })
+    },
     getList() {
       this.listLoading = true
-      commitList(this.listQuery)
-      // listBrand(this.listQuery)
+      departmentList({lab:this.labId, status: this.statusId})
         .then(response => {
           this.list = response.data.data.list
           this.total = response.data.data.total
@@ -109,36 +128,43 @@ export default {
           this.listLoading = false
         })
     },
-    getBrand() {
-      laboratoryList()
-        .then(response => {
-          this.brandList = response.data.data.list
-        })
-    },
-    deleteRow(index,rows){
-      rows.splice(index, 1);
-    },
-    handleFilter() {
+    statusChange (item){
+      this.statusId = item
       this.getList()
+    },
+    labChange (item){
+      let lab = this.labList.filter(it=>{
+        return it.id === item
+      })
+      if (lab.length) {
+        this.labName = lab[0].name || ''
+      }
+      this.getList()
+    },
+    searchTypeChange (item){
+      let sel = this.searchTypeList.filter(it=>{
+        return it.value === item
+      })
+      if (sel.length) {
+        this.searchTypeValue = sel[0].label
+      }
     },
     handleSelectionChange(val) {
       this.multipleSelection = val
     },
-    handleBatchRecept() {
+    handleBatchPass() {
       if (this.multipleSelection.length === 0) {
         this.$message.error('请选择至少一条记录')
         return
       }
-      const ids = []
-      _.forEach(this.multipleSelection, function(item) {
-        ids.push(item.id)
-      })
-      sureStatus({ ids: ids })
+      
+      // departmentPass({ ids: ids })
+      departmentPass(this.multipleSelection)
         .then(response => {
-          this.$notify.success({
-            title: '成功',
-            message: '批量通过操作成功'
-          })
+        //   this.$notify.success({
+        //     title: '成功',
+        //     message: '审批成功'
+        //   })
           this.getList()
         })
         .catch(response => {

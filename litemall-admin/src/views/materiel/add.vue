@@ -28,8 +28,8 @@
         </el-form-item>
 
         <el-form-item label="处置分类">
-          <el-select v-model="goods.type" clearable>
-            <el-option v-for="item in brandList" :key="item.value" :label="item.label" :value="item.value" />
+          <el-select v-model="goods.typeId" clearable  @change="typeChange">
+            <el-option v-for="item in typeList" :key="item.value" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
 
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { listBrand, materielAdd } from '@/api/materiel'
+import { drugTypeList, materielAdd } from '@/api/materiel'
 import { MessageBox } from 'element-ui'
 import { getToken } from '@/utils/auth'
 
@@ -54,7 +54,7 @@ export default {
   components: { },
   data() {
     return {
-      brandList: [],
+      typeList: [],
       goods: { 
         cas:'',
         name:'',
@@ -62,12 +62,13 @@ export default {
         engName:'',
         otherEngName:'',
         formula:'',
+        typeId:'',
         type:'',
       },
-      rules: {
-        name: [{ required: true, message: '商品名称不能为空', trigger: 'blur' }],
-        type: [{ required: true, message: '处置类型不能为空', trigger: 'blur' }]
-      },
+      // rules: {
+      //   name: [{ required: true, message: '商品名称不能为空', trigger: 'blur' }],
+      //   type: [{ required: true, message: '处置类型不能为空', trigger: 'blur' }]
+      // },
     }
   },
   computed: {
@@ -76,18 +77,22 @@ export default {
     this.init()
   },
   methods: {
+    typeChange (item){
+      let types = this.typeList.filter(it=>{
+        return it.id === item
+      })
+      if (types.length) {
+        this.goods.type = types[0].name || ''
+      }
+    },
+    getType() {
+      drugTypeList()
+        .then(response => {
+          this.typeList = response.data.data.list
+        })
+    },
     init: function() {
-      
-      this.brandList = [
-        {value:'1',label:'高危'},
-        {value:'2',label:'汞化物'},
-        {value:'3',label:'拒收品'},
-        {value:'4',label:'冰块冷藏'},
-        {value:'5',label:'甲类'},
-        {value:'6',label:'废酸'},
-        {value:'7',label:'重金属'},
-        {value:'8',label:'普通试剂'},
-      ]
+      this.getType()
     },
     handleCancel: function() {
       // this.$router.push({ path: '/goods/list' })
@@ -99,6 +104,7 @@ export default {
         otherEngName:'',
         formula:'',
         type:'',
+        typeId:'',
       }
     },
     handleAdd: function() {

@@ -3,14 +3,15 @@
 
     <!-- 查询和其他操作 -->
     <div class="filter-container">
-      <el-select v-model="schoolId" clearable placeholder="请选择学校" @change="schoolChange">
+      <!-- <el-select v-model="schoolId" clearable placeholder="请选择学校" @change="schoolChange"> -->
+      <el-select v-model="schoolId" placeholder="请选择学校" @change="schoolChange">
         <el-option v-for="item in schoolList" :key="item.value" :label="item.name" :value="item.id" />
       </el-select>
-      <el-select v-model="zoneId" clearable placeholder="请选择校区" @change="zoneChange">
+      <el-select v-model="zoneId" placeholder="请选择校区" @change="zoneChange">
         <el-option v-for="item in zoneList" :key="item.value" :label="item.name" :value="item.id" />
       </el-select>
-      <el-select v-model="labId" clearable placeholder="请选择实验室" @change="labChange">
-        <el-option v-for="item in brandList" :key="item.value" :label="item.name" :value="item.id" />
+      <el-select v-model="labId" placeholder="请选择实验室" @change="labChange">
+        <el-option v-for="item in labList" :key="item.value" :label="item.name" :value="item.id" />
       </el-select>
      </div>
 
@@ -26,22 +27,22 @@
       <el-table-column type="selection" width="55" />
       
       <el-table-column align="center" label="品名" prop="name" />
-      <el-table-column align="center" label="cas号" prop="id" />
+      <el-table-column align="center" label="cas号" prop="cas" />
       <el-table-column align="center" label="重量" prop="weight">
         <template slot-scope="scope">
           <el-input v-model="scope.row.weight" />
         </template>
       </el-table-column>
       <el-table-column align="center" label="分类" prop="name" show-overflow-tooltip/>
-      <el-table-column align="center" label="备注" prop="mark" >
+      <el-table-column align="center" label="备注" prop="remark" >
           <template slot-scope="scope">
-            <el-input v-model="scope.row.mark" />
+            <el-input v-model="scope.row.remark" />
           </template>
       </el-table-column>
 
       <el-table-column align="center" label="操作" min-width="120" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button v-permission="['GET /admin/index/read']" type="danger" size="mini" @click="deleteRow(scope.$index, list)">删除</el-button>
+          <el-button v-permission="['POST /admin/drug/application/delete']" type="danger" size="mini" @click="deleteRow(scope.$index, scope.row, list)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -127,7 +128,7 @@
 
 <script>
 
-import { schoolList, schoolZone, laboratoryList, queryList, searchList,materielAdd, drugCommit, saveStatus, deleteBrand } from '@/api/materiel'
+import { schoolList, schoolZone, laboratoryList, queryList, searchList,materielAdd, drugCommit, saveStatus, delRowData } from '@/api/materiel'
 import BackToTop from '@/components/BackToTop'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import _ from 'lodash'
@@ -142,7 +143,7 @@ export default {
       listLoading: false,
       dialogFormVisible: false,
       dialogStatus: 'create',//create新增 else编辑
-      brandList: [],
+      labList: [],
       schoolList: [],
       zoneList: [],
       schoolId: '',
@@ -183,26 +184,38 @@ export default {
       schoolList({})
         .then(response => {
           this.schoolList = response.data.data.list
+          if (this.schoolList.length) {
+            this.schoolId = this.schoolList[0].id
+            this.schoolName = this.schoolList[0].name
+          }
         })
     },
     getZone() {
       schoolZone({})
         .then(response => {
           this.zoneList = response.data.data.list
+          if (this.zoneList.length) {
+            this.zoneId = this.zoneList[0].id
+            this.zoneName = this.zoneList[0].name
+          }
         })
     },
     getBrand() {
       laboratoryList()
         .then(response => {
-          this.brandList = response.data.data.list
+          this.labList = response.data.data.list
+          if (this.labList.length) {
+            this.labId = this.labList[0].id
+            this.labName = this.labList[0].name
+            this.getList()
+          }
         })
     },
     getList() {
       this.listLoading = true
-      queryList()
+      queryList({lab:this.labId})
         .then(response => {
           this.list = response.data.data.list
-          this.list = []
           this.total = response.data.data.total
           this.listLoading = false
         })
@@ -221,29 +234,49 @@ export default {
       this.dialogmultipleSelection.filter( (item)=> {
         let it = {...item}
         it.schoolId = this.schoolId
+        it.schoolName = this.schoolName
         it.zoneId = this.zoneId
+        it.zoneName = this.zoneName
 
         it.labId = this.labId
         it.labName = this.labName
         it.weight = ''
-        it.mark = ''
+        it.remark = ''
+        it.drugId = item.id
+        delete it.id
         addlist.push(it)
       })
-      console.log("this.addlist",addlist)
-      this.list = this.list.concat(this.dialogmultipleSelection)
+      // console.log("this.addlist",addlist)
+      this.list = this.list.concat(addlist)
       // this.list = this.list.concat(this.dialogmultipleSelection)
       this.dialogFormVisible = false
       this.searchName = ''
       this.tableData = []
     },
     schoolChange (item){
-      this.schoolName = item.label || ''
+      let school = this.schoolList.filter(it=>{
+        return it.id === item
+      })
+      if (school.length) {
+        this.schoolName = school[0].name || ''
+      }
     },
     zoneChange (item){
-      this.zoneName = item.label || ''
+      let zone = this.zoneList.filter(it=>{
+        return it.id === item
+      })
+      if (zone.length) {
+        this.zoneName = zone[0].name || ''
+      }
     },
     labChange (item){
-      this.labName = item.label || ''
+      let lab = this.labList.filter(it=>{
+        return it.id === item
+      })
+      if (lab.length) {
+        this.labName = lab[0].name || ''
+      }
+      this.getList()
     },
     searchTypeChange (item){
       let sel = this.searchTypeList.filter(it=>{
@@ -253,8 +286,41 @@ export default {
         this.searchTypeValue = sel[0].label
       }
     },
-    deleteRow(index,rows){
-      rows.splice(index, 1);
+    deleteRow(index, row, rows){
+      if (row.id) {
+        this.$confirm('此操作将永久删除该条数据, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          
+            this.listLoading = true
+            delRowData({id:row.id})
+            // delRowData(row.id)
+            .then(response => {
+              this.$notify.success({
+                title: '成功',
+                message: '删除成功'
+              })
+              this.getList()
+              this.listLoading = false
+            })
+            .catch(() => {
+              this.listLoading = false
+            })
+        }).catch(() => {
+          // this.$message({
+          //   type: 'info',
+          //   message: '已取消删除'
+          // });          
+        });
+      } else {
+         rows.splice(index, 1);
+         this.$notify.success({
+           title: '成功',
+           message: '删除成功'
+         })
+      }
     },
     updateData(){},
     handleFilter() {//搜索
@@ -309,7 +375,7 @@ export default {
       // _.forEach(this.multipleSelection, function(item) {
       //   ids.push(item.id)
       // })
-      drugCommit({ ids: ids })
+      drugCommit(this.multipleSelection)
         .then(response => {
           this.$notify.success({
             title: '成功',

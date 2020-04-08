@@ -44,7 +44,8 @@ router.beforeEach((to, from, next) => {
         if (hasPermission(store.getters.perms, to.meta.perms)) {
           next()
         } else {
-          next({ path: '/401', replace: true, query: { noGoBack: true }})
+          // next({ path: '/401', replace: true, query: { noGoBack: true }})
+          next({ path: '/', replace: true, query: { noGoBack: true }}) //没有权限跳转主页
         }
         // 可删 ↑
       }

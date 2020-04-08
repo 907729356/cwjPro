@@ -125,14 +125,14 @@ $cursor: #fff;
 /* reset element-ui css */
 .login-container {
   
-  background-image: url(../../assets/img/loginBg.jpg);
+  // background-image: url(../../assets/img/loginBg.jpg);
 
   .el-input {
     display: inline-block;
     height: 47px;
     width: 85%;
     color: white;
-    opacity: 0.7;
+    // opacity: 0.7;
 
     input {
       background: transparent;

@@ -15,6 +15,14 @@ export function queryList(query) {
     params: query
   })
 }
+// 提交方删除
+export function delRowData(data) {
+  return request({
+    url: '/drug/application/delete',
+    method: 'post',
+    data
+  })
+}
 // 申请列表查询
 export function labList(query) {
   return request({
@@ -26,17 +34,42 @@ export function labList(query) {
 // 中转站列表查询
 export function stationList(query) {
   return request({
+    url: '/drug/application/queryCommited',
+    method: 'get',
+    params: query
+  })
+}
+
+// 中转方确认
+export function sureStatus(data) {
+  return request({
+    url: '/drug/application/confirm',
+    method: 'post',
+    data
+  })
+}
+// 总务处列表查询
+export function departmentList(query) {
+  return request({
     url: '/drug/application/queryAll',
     method: 'get',
     params: query
   })
 }
-// 总务处列表查询
-export function commitList(query) {
+// 总务处-审批
+export function departmentPass(data) {
   return request({
-    url: '/drug/application/queryCommited',
+    url: '/drug/application/pass',
+    method: 'post',
+    data
+  })
+}
+// 处置分类列表
+export function drugTypeList(data) {
+  return request({
+    url: '/drug/address/drugType',
     method: 'get',
-    params: query
+    params: data
   })
 }
 // 学校列表
@@ -82,14 +115,6 @@ export function materielAdd(data) {
   })
 }
 
-// 中转方确认
-export function sureStatus(data) {
-  return request({
-    url: '/drug/application/confirm',
-    method: 'post',
-    data
-  })
-}
 // 提交方保存
 export function saveStatus(data) {
   return request({
@@ -131,10 +156,3 @@ export function updateBrand(data) {
   })
 }
 
-export function deleteBrand(data) {
-  return request({
-    url: '/brand/delete',
-    method: 'post',
-    data
-  })
-}
