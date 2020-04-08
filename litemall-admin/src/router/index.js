@@ -81,6 +81,27 @@ export default new Router({
 
 export const asyncRouterMap = [
   
+  {
+    path: '/profile',
+    component: Layout,
+    redirect: 'noredirect',
+    alwaysShow: true,
+    children: [
+      {
+        path: 'password',
+        component: () => import('@/views/profile/password'),
+        name: 'password',
+        meta: { title: '修改密码', noCache: true }
+      },
+      // {
+      //   path: 'notice',
+      //   component: () => import('@/views/profile/notice'),
+      //   name: 'notice',
+      //   meta: { title: '通知中心', noCache: true }
+      // },
+    ],
+    hidden: true
+  },
 
   {
     path: '/materiel',
@@ -144,16 +165,6 @@ export const asyncRouterMap = [
           noCache: true
         }
       },
-      // {
-      //   path: 'base',
-      //   component: () => import('@/views/materiel/brand'),
-      //   name: 'baseAdd',
-      //   meta: {
-      //     perms: ['GET /admin/brand/list', 'POST /admin/brand/create', 'GET /admin/brand/read', 'POST /admin/brand/update', 'POST /admin/brand/delete'],
-      //     title: '数据字典',
-      //     noCache: true
-      //   }
-      // },
     ]
   },
   
@@ -666,27 +677,6 @@ export const asyncRouterMap = [
   //       meta: { title: '快递鸟', icon: 'link' }
   //     }
   //   ]
-  // },
-  // {
-  //   path: '/profile',
-  //   component: Layout,
-  //   redirect: 'noredirect',
-  //   alwaysShow: true,
-  //   children: [
-  //     {
-  //       path: 'password',
-  //       component: () => import('@/views/profile/password'),
-  //       name: 'password',
-  //       meta: { title: '修改密码', noCache: true }
-  //     },
-  //     {
-  //       path: 'notice',
-  //       component: () => import('@/views/profile/notice'),
-  //       name: 'notice',
-  //       meta: { title: '通知中心', noCache: true }
-  //     },
-  //   ],
-  //   hidden: true
   // },
 
   { path: '*', redirect: '/404', hidden: true }
