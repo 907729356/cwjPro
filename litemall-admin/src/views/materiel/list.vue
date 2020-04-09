@@ -48,13 +48,13 @@
 
 <script>
 
-import { schoolList, schoolZone, laboratoryList, labList, searchList,materielAdd, drugCommit, saveStatus, delRowData } from '@/api/materiel'
+import { schoolList, schoolZone, laboratoryList, labList, saveStatus } from '@/api/materiel'
 import BackToTop from '@/components/BackToTop'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import _ from 'lodash'
 
 export default {
-  name: 'Aftersale',
+  name: 'materiellist',
   components: { BackToTop, Pagination },
   data() {
     return {

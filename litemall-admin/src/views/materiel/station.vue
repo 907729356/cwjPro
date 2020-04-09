@@ -57,7 +57,7 @@ import Pagination from '@/components/Pagination' // Secondary package based on e
 import _ from 'lodash'
 
 export default {
-  name: 'Aftersale',
+  name: 'materielstation',
   components: { BackToTop, Pagination },
   data() {
     return {

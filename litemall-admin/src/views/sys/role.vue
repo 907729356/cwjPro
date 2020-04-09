@@ -12,7 +12,7 @@
     <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
       <el-table-column align="center" label="角色名称" prop="name" sortable/>
 
-      <el-table-column align="center" label="说明" prop="desc"/>
+      <el-table-column align="center" label="说明" prop="description"/>
 
       <el-table-column align="center" label="操作" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -31,8 +31,8 @@
         <el-form-item label="角色名称" prop="name">
           <el-input v-model="dataForm.name"/>
         </el-form-item>
-        <el-form-item label="说明" prop="desc">
-          <el-input v-model="dataForm.desc"/>
+        <el-form-item label="说明" prop="description">
+          <el-input v-model="dataForm.description"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -86,7 +86,7 @@ export default {
       dataForm: {
         id: undefined,
         name: undefined,
-        desc: undefined
+        description: undefined
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -134,7 +134,7 @@ export default {
       this.dataForm = {
         id: undefined,
         name: undefined,
-        desc: undefined
+        description: undefined
       }
     },
     handleCreate() {

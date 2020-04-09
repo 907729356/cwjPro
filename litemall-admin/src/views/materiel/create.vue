@@ -128,13 +128,13 @@
 
 <script>
 
-import { schoolList, schoolZone, laboratoryList, queryList, searchList,materielAdd, drugCommit, saveStatus, delRowData } from '@/api/materiel'
+import { schoolList, schoolZone, laboratoryList, queryList, searchList, drugCommit, saveStatus, delRowData } from '@/api/materiel'
 import BackToTop from '@/components/BackToTop'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import _ from 'lodash'
 
 export default {
-  name: 'Aftersale',
+  name: 'materielcreate',
   components: { BackToTop, Pagination },
   data() {
     return {
@@ -172,9 +172,12 @@ export default {
     this.searchTypeList =[
       {value:'cas',label:'cas号'},
       {value:'name',label:'中文名'},
+      // {value:'name',label:'中文名/中文别名'},
       {value:'otherName',label:'中文别名'},
       {value:'engName',label:'英文名'},
+      // {value:'engName',label:'英文名/英文别名'},
       {value:'otherEngName',label:'英文别名'},
+      // {value:'formula',label:'化学式'},
     ]
     this.searchType = this.searchTypeList[0].value
     this.searchTypeValue = this.searchTypeList[0].label

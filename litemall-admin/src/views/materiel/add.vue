@@ -50,7 +50,7 @@ import { MessageBox } from 'element-ui'
 import { getToken } from '@/utils/auth'
 
 export default {
-  name: 'GoodsEdit',
+  name: 'materieladd',
   components: { },
   data() {
     return {
