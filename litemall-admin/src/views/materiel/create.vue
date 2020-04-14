@@ -54,7 +54,7 @@
           <el-select v-model="searchType" placeholder="请选搜索类型" style="width:120px;" @change="searchTypeChange">
             <el-option v-for="item in searchTypeList" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
-           <el-input style="width:200px;"  :placeholder="`请输入${searchTypeValue}`" v-model="searchName"/>
+           <el-input style="width:200px;" onkeyup="this.value=this.value.replace(/，/ig,',')" :placeholder="`请输入${searchTypeValue}`" v-model.trim="searchName"/>
             <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
           </div>
           <div style="minWidth:400px;">
@@ -331,7 +331,9 @@ export default {
     },
     getSearchData() {
       this.listLoading = true
-      searchList({[this.searchType]:this.searchName})
+      let inpName = this.searchName
+      // let inpName = this.searchName.toString().replace(/，/ig,',')//全角逗号转半角
+      searchList({[this.searchType]:inpName})
         .then(response => {
           this.tableData = response.data && response.data.data && response.data.data.list
           this.listLoading = false
