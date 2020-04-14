@@ -10,18 +10,18 @@
         <el-form-item label="cas号">
           <el-input v-model="goods.cas"  placeholder="cas号"/>
         </el-form-item>
-        <el-form-item label="品名">
+        <el-form-item label="药品名">
           <el-input v-model="goods.name"  placeholder="药品名"/>
         </el-form-item>
         <el-form-item label="别名">
-          <el-input v-model="goods.otherName"  placeholder="别名"/>
+          <el-input v-model="goods.otherName"  placeholder="别名(别名之间请用;符号隔开)"/>
         </el-form-item>
         <el-form-item label="英文名">
           <el-input v-model="goods.engName"  placeholder="英文名"/>
         </el-form-item>
 
         <el-form-item label="英文别名">
-          <el-input v-model="goods.otherEngName" placeholder="英文别名" />
+          <el-input v-model="goods.otherEngName" placeholder="英文别名(别名之间请用;符号隔开)" />
         </el-form-item>
         <el-form-item label="化学分子式">
           <el-input v-model="goods.formula" placeholder="化学分子式" />

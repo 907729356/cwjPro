@@ -171,13 +171,9 @@ export default {
     this.getList()
     this.searchTypeList =[
       {value:'cas',label:'cas号'},
-      {value:'name',label:'中文名'},
-      // {value:'name',label:'中文名/中文别名'},
-      {value:'otherName',label:'中文别名'},
-      {value:'engName',label:'英文名'},
-      // {value:'engName',label:'英文名/英文别名'},
-      {value:'otherEngName',label:'英文别名'},
-      // {value:'formula',label:'化学式'},
+      {value:'name',label:'中文名/中文别名'},
+      {value:'engName',label:'英文名/英文别名'},
+      {value:'formula',label:'化学分支式'},
     ]
     this.searchType = this.searchTypeList[0].value
     this.searchTypeValue = this.searchTypeList[0].label

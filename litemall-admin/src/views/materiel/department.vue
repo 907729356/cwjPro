@@ -98,7 +98,7 @@ export default {
     // this.getList()
     
     this.statusList = [
-      {value:'1',label:'未提交'},
+      // {value:'1',label:'未提交'},
       {value:'2',label:'已提交'},
       {value:'3',label:'已审批'},
       {value:'4',label:'已确定'},
